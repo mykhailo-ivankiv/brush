@@ -41,121 +41,23 @@ const init = () => {
 
   const canvasCenter = [(width / 2), (height / 2)]
 
-
-  // ctx.lineWidth = 3;
-  // ctx.globalAlpha = 0.5;
-
   let prevPoint = null;
   el.addEventListener("mousemove", ({clientX, clientY}) => {
     const p = [clientX, clientY];
-    const r = getDistance(p,canvasCenter) * 0.25
-
-    ctx.clearRect(0, 0, width, height);
+    const r = getDistance(p,canvasCenter) * 0.05
 
     if (prevPoint) {
       const [p0, r0] = prevPoint
-
-      const brushShape = brush(p1, r1, p0, r0)
+      const brushShape = brush(p0, r0, p, r)
 
       drawShape(ctx)(brushShape, shapeStyle)
-
-      // drawBrushGuideLines(p0, r0, p1, r1)
     }
 
     prevPoint= [p, r];
   })
 
   const helperStyle = {strokeStyle : "#bf616a", lineWidth: 1}
-  const shapeStyle = {strokeStyle : "#5e81ac", lineWidth: 3}
-
-  const brush = (p1, r1, p2, r2) => {
-
-    const [x1, y1] = p1;
-    const [x2, y2] = p2;
-
-    const isReverse = Boolean((x2 - x1) < 0);
-
-    const baseAngle = Math.atan( (y2 - y1)  / (x2 - x1 ));
-
-
-    const l = getDistance(p1, p2);
-    const angle = Math.asin((r1 - r2)/ l);
-
-    // console.log( radiansToDegrees (angle) )
-
-    const startPoint1 = rotate(p1, [p1[0], p1[1] + r1], 0 - angle + baseAngle)
-    const endPoint1 = rotate(p1, [p1[0], p1[1] + r1], Math.PI   + angle + baseAngle)
-
-    const startPoint2 = rotate(p2, [p2[0], p2[1] + r2], Math.PI   + angle + baseAngle )
-    const endPoint2 = rotate(p2, [p2[0], p2[1] + r2],   0 - angle + baseAngle)
-
-    const d = `
-      M ${startPoint1[0]},${startPoint1[1]}
-      A ${r1} ${r1} 0 ${angle > 0 ? 1 : 0} 1 ${endPoint1[0]},${endPoint1[1]}
-      L ${startPoint2[0]},${startPoint2[1]}
-      A ${r2} ${r2} 0 ${angle > 0 ? 0 : 1} 1 ${endPoint2[0]},${endPoint2[1]}
-      Z
-    `
-    drawShape(ctx)(line([0, p1[1]], [Number.MAX_SAFE_INTEGER, p1[1]]), helperStyle)
-    drawShape(ctx)(line([p1[0], 0], [p1[0] ,Number.MAX_SAFE_INTEGER]), helperStyle)
-    // Centres of base circle
-    drawShape(ctx)(circle(p1, 3), helperStyle)
-    drawShape(ctx)(circle(p2, 3), helperStyle)
-    // Base circles
-    drawShape(ctx)(circle(p1, r1), helperStyle)
-    drawShape(ctx)(circle(p2, r2), helperStyle)
-    //
-    drawShape(ctx)(circle(startPoint1, 3), helperStyle)
-    drawShape(ctx)(circle(endPoint1, 3), helperStyle)
-    //
-    drawShape(ctx)(circle(startPoint2, 3), helperStyle)
-    drawShape(ctx)(circle(endPoint2, 3), helperStyle)
-
-    return new Path2D(d)
-  }
-
-  const p1 = [400, 300];
-  // const p2 = [590, 400];
-  const r1 = 40;
-  // const r2 = 20;
-  //
-  // drawShape(ctx)(brush( p1, r1, p2, r2), shapeStyle)
-  //
-  // // TODO: Create one shape;
-  const drawBrushGuideLines = (p1, r1, p2, r2) => {
-    // Centres of base circle
-    drawShape(ctx)(circle(p1, 3), helperStyle)
-    drawShape(ctx)(circle(p2, 3), helperStyle)
-    // Base circles
-    drawShape(ctx)(circle(p1, r1), helperStyle)
-    drawShape(ctx)(circle(p2, r2), helperStyle)
-
-    const [x1, y1] = p1;
-    const [x2, y2] = p2;
-
-    const baseAngle = Math.atan(x1 - x2 / y1 -y2  );
-
-    const l = getDistance(p1, p2);
-
-    const angle = Math.asin( (r1 - r2)/ l);
-
-    const startPoint1 = rotate(p1, [p1[0], p1[1] + r1], - angle - baseAngle)
-    const endPoint1 = rotate(p1, [p1[0], p1[1] + r1], Math.PI + angle - baseAngle)
-
-    const startPoint2 = rotate(p2, [p2[0], p2[1] + r2], Math.PI + angle - baseAngle)
-    const endPoint2 = rotate(p2, [p2[0], p2[1] + r2], - angle - baseAngle)
-
-    // base points for first arc
-    drawShape(ctx)(circle(startPoint1, 3), helperStyle)
-    drawShape(ctx)(circle(endPoint1, 3), helperStyle)
-
-    // base points for second arc
-    drawShape(ctx)(circle(startPoint2, 3), helperStyle)
-    drawShape(ctx)(circle(endPoint2, 3), helperStyle)
-
-  }
-
-
+  const shapeStyle = {strokeStyle : "#5e81ac00", lineWidth: 3, fillStyle: "#5e81ac"}
 };
 
 init();
