@@ -1,7 +1,7 @@
 export const rotate = (basePoint = [0, 0], targetPoint, angle) => {
   const [bx, by] = basePoint;
   const [tx, ty]= targetPoint;
-  const [tmx, tmy] = [tx-bx, ty - by];
+  const [tmx, tmy] = [tx - bx, ty - by];
 
   const [rx, ry] = [
     tmx * Math.cos(angle) - tmy * Math.sin(angle),
